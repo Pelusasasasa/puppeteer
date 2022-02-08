@@ -1,0 +1,80 @@
+html {
+    font-size: 10px; 
+    box-sizing: border-box;
+  }
+  body {
+    font-size: 1.6rem;
+  }
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+
+
+  .style{
+      display: flex;
+      flex-direction: column;
+  }
+
+  .seccion-buscar{
+      display: flex;
+      justify-content: space-around;
+  }
+
+  .busqueda{
+      display: flex;
+      text-align: center;
+      flex-direction: column;
+  }
+  .principio{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  h4{
+    margin: 0;
+    margin-left: 1rem;
+    text-align: center;
+  }
+  fieldset{
+    margin: 2rem;
+    height: 20rem;
+    overflow: scroll;
+  }
+
+  table{
+    width: 100%;
+    border-collapse: collapse;
+
+  }
+
+  .spinnerSolution,.spinnerSegurity,.spinnerFiesa,.spinnerSelnet{
+    border: .4rem solid rgba(0,0,0,.1);
+    width: 3.6rem;
+    height: 3.6rem;
+    border-radius: 50%;
+    border-left-color: rgb(39, 136, 168);
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0%{
+      transform: rotate(0deg);
+    }
+
+    100%{
+      transform: rotate(360deg);
+    }
+  }
+
+  table tr td{
+    text-align: center;
+  }
+
+
+  .none{
+    display: none;
+  }
+
+  .guardado{
+    background-color: lightgreen;
+  }

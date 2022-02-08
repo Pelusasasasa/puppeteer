@@ -1,0 +1,21 @@
+{
+  "name": "puppe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^15.0.0",
+    "electron-reload": "^2.0.0-alpha.1",
+    "puppeteer": "^13.1.2",
+    "xlsx": "^0.18.0"
+  },
+  "devDependencies": {
+    "electron": "^16.0.8"
+  }
+}
