@@ -1,9 +1,8 @@
 const puppeteer = require('puppeteer');
 require('dotenv').config();
 
-const path = "/home/pelusa/Escritorio/";
 const env = process.env
-let pathExcelSelnet
+let pathExcel
 
 let productosAMostar = []
 const tbody = document.querySelector('.tbody')
@@ -14,7 +13,7 @@ codigo.addEventListener('keypress',async e=>{
         buscarSolution(codigo.value)
         buscarSegurity(codigo.value)
         buscarFiesa(codigo.value)
-        selnet(codigo.value)
+        //selnet(codigo.value)
     }
 })
 const spinnerSolution = document.querySelector('.spinnerSolution')
@@ -159,7 +158,7 @@ const buscarSegurity = async (texto)=>{
 
 const file = document.querySelector('#file');
 file.addEventListener('change',e=>{
-    pathExcelSelnet = e.target.files[0].path;
+    pathExcel = e.target.files[0].path;
 })
 
 document.addEventListener('click',e=>{
@@ -295,47 +294,21 @@ async function generarTexto(datos) {
 const guardar = document.querySelector('.guardar');
 guardar.addEventListener('click',async e=>{
     const fs = require('fs');
-    const XLSX = require("xlsx");
-    if (fs.existsSync(`${path}Pedidos.xlsx`)) {
-    let worksheets = {}
-    const workbook = XLSX.readFile(path + "Pedidos.xlsx")
-    for(const sheetName of workbook.SheetNames){
-        worksheets[sheetName] = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-    }
-    const Hoja1 = Object.keys(worksheets)[0];
-    productosAMostar.forEach(product =>{
-
-        worksheets[Hoja1].push(product);
-    })
-    XLSX.utils.sheet_add_json(workbook.Sheets[Hoja1],worksheets[Hoja1]);
-    XLSX.writeFile(workbook,path + "Pedidos.xlsx")
-    }else{
+    const XLSX = require("xlsx");   
+    if (fs.existsSync(`${pathExcel}`)) {
         let worksheets = {}
-        const workbook = XLSX.utils.book_new();
-        workbook.SheetNames.push("Hoja1")
-        const a = {
-            Hoja1:[]
-        }
-        Object.assign(workbook.Sheets,a)
-        productosAMostar.forEach(producto=>workbook.Sheets["Hoja1"].push(producto))
-
-        console.log(workbook);
-        XLSX.writeFile(workbook,path + "Pedidos.xlsx")
-
-        const workbook2 = XLSX.readFile(path + "Pedidos.xlsx")
-        for(const sheetName of workbook2.SheetNames){
-            worksheets[sheetName] = XLSX.utils.sheet_to_json(workbook2.Sheets[sheetName]);
+        const workbook = XLSX.readFile(pathExcel)
+        for(const sheetName of workbook.SheetNames){
+            worksheets[sheetName] = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
         }
         const Hoja1 = Object.keys(worksheets)[0];
         productosAMostar.forEach(product =>{
-    
             worksheets[Hoja1].push(product);
         })
-        XLSX.utils.sheet_add_json(workbook2.Sheets[Hoja1],worksheets[Hoja1]);
-        XLSX.writeFile(workbook2,path + "Pedidos.xlsx")
-        location.reload();
+        XLSX.utils.sheet_add_json(workbook.Sheets[Hoja1],worksheets[Hoja1]);
+        console.log(workbook)
+        XLSX.writeFile(workbook,pathExcel)
     }
-    
     
 })
 
@@ -346,10 +319,10 @@ const selnet = (texto)=>{
     spinnerSelnet.classList.remove('none')
     const XLSX = require('xlsx');
     let worksheets = {};
-    if (!pathExcelSelnet) {
+    if (1) {
         alert("No se cargo el excel de Selnet")
     }else{ 
-    const workbook = XLSX.readFile(pathExcelSelnet)
+    const workbook = XLSX.readFile()
     for(const sheetName of workbook.SheetNames){
         worksheets[sheetName] = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
     }
@@ -365,7 +338,6 @@ const selnet = (texto)=>{
             return (product.__EMPTY_1).includes(texto)
         }
     })
-    console.log(productos);
 
     productos.forEach(producto=>{
         const name = producto["                                   "];
