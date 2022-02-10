@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const env = process.env
 let pathExcel
+pathSelnet = "";
 
 let productosAMostar = []
 const tbody = document.querySelector('.tbody')
@@ -13,7 +14,7 @@ codigo.addEventListener('keypress',async e=>{
         buscarSolution(codigo.value)
         buscarSegurity(codigo.value)
         buscarFiesa(codigo.value)
-        //selnet(codigo.value)
+        selnet(codigo.value)
     }
 })
 const spinnerSolution = document.querySelector('.spinnerSolution')
@@ -156,40 +157,6 @@ const buscarSegurity = async (texto)=>{
     spinnerSegurity.classList.add('none')
 }
 
-const file = document.querySelector('#file');
-file.addEventListener('change',e=>{
-    pathExcel = e.target.files[0].path;
-})
-
-document.addEventListener('click',e=>{
-    if(e.path[0].innerHTML === "Agregar" || e.path[0].innerHTML === "Borrar"){
-        const trSeleccionado = e.path[2];
-        trSeleccionado.children[5].children[0].innerHTML === "Borrar"
-        
-        if (trSeleccionado.children[5].children[0].innerHTML === "Borrar") {
-            trSeleccionado.classList.remove('guardado')
-            trSeleccionado.classList.contains('guardado') ? trSeleccionado.children[5].children[0].innerHTML = "Borrar" : trSeleccionado.children[5].children[0].innerHTML = "Agregar"
-            const Aborrar = productosAMostar.find(producto => producto.NOMBRE === trSeleccionado.children[1].innerHTML);
-            const index = productosAMostar.indexOf(Aborrar);
-            if (index > -1) {
-                productosAMostar.splice(index,1);
-            }
-        }else{
-            trSeleccionado.classList.add('guardado')
-            trSeleccionado.classList.contains('guardado') ? trSeleccionado.children[5].children[0].innerHTML = "Borrar" : trSeleccionado.children[5].children[0].innerHTML = "Agregar"
-            const productoGuardar = {
-                CODIGO: trSeleccionado.children[0].innerHTML,
-                NOMBRE: trSeleccionado.children[1].innerHTML,
-                PRECIO: trSeleccionado.children[2].innerHTML,
-                STOCK: trSeleccionado.children[3].innerHTML,
-                EMPRESA: trSeleccionado.children[4].innerHTML
-            }
-    
-            productosAMostar.push(productoGuardar)
-        }
-    }
-
-})
 const tbodyFiesa = document.querySelector('.tbodyFiesa');
 const spinnerFiesa = document.querySelector('.spinnerFiesa')
 const buscarFiesa = async (texto)=>{
@@ -259,36 +226,40 @@ const buscarFiesa = async (texto)=>{
     spinnerFiesa.classList.add('none')
 }
 
-function descargarArchivo(contenidoEnBlob, nombreArchivo) {
+const file = document.querySelector('#file');
+file.addEventListener('change',e=>{
+    pathExcel = e.target.files[0].path;
+})
+
+document.addEventListener('click',e=>{
+    if(e.path[0].innerHTML === "Agregar" || e.path[0].innerHTML === "Borrar"){
+        const trSeleccionado = e.path[2];
+        trSeleccionado.children[5].children[0].innerHTML === "Borrar"
+        
+        if (trSeleccionado.children[5].children[0].innerHTML === "Borrar") {
+            trSeleccionado.classList.remove('guardado')
+            trSeleccionado.classList.contains('guardado') ? trSeleccionado.children[5].children[0].innerHTML = "Borrar" : trSeleccionado.children[5].children[0].innerHTML = "Agregar"
+            const Aborrar = productosAMostar.find(producto => producto.NOMBRE === trSeleccionado.children[1].innerHTML);
+            const index = productosAMostar.indexOf(Aborrar);
+            if (index > -1) {
+                productosAMostar.splice(index,1);
+            }
+        }else{
+            trSeleccionado.classList.add('guardado')
+            trSeleccionado.classList.contains('guardado') ? trSeleccionado.children[5].children[0].innerHTML = "Borrar" : trSeleccionado.children[5].children[0].innerHTML = "Agregar"
+            const productoGuardar = {
+                CODIGO: trSeleccionado.children[0].innerHTML,
+                NOMBRE: trSeleccionado.children[1].innerHTML,
+                PRECIO: trSeleccionado.children[2].innerHTML,
+                STOCK: trSeleccionado.children[3].innerHTML,
+                EMPRESA: trSeleccionado.children[4].innerHTML
+            }
     
-//ds-2ce10df0t-f
-    var reader = new FileReader();
-    reader.onload = function (event) {
-        var save = document.createElement('a');
-        save.href = event.target.result;
-        save.target = '_blank';
-        save.download = nombreArchivo || 'archivo.xlsx';
-        var clicEvent = new MouseEvent('click', {
-            'view': window,
-                'bubbles': true,
-                'cancelable': true
-        });
-        save.dispatchEvent(clicEvent);
-        (window.URL || window.webkitURL).revokeObjectURL(save.href);
-    };
+            productosAMostar.push(productoGuardar)
+        }
+    }
 
-    console.log(contenidoEnBlob);
-    reader.readAsArrayBuffer(contenidoEnBlob);
-};
-
-//Genera un objeto Blob con los datos en un archivo TXT
-async function generarTexto(datos) {
-    console.log(datos);
-    const a = new Blob([datos], { type: 'application/json'});
-    console.log(await a.text());
-    return a
-};
-
+})
 
 
 const guardar = document.querySelector('.guardar');
@@ -319,10 +290,10 @@ const selnet = (texto)=>{
     spinnerSelnet.classList.remove('none')
     const XLSX = require('xlsx');
     let worksheets = {};
-    if (1) {
+    if (!pathSelnet) {
         alert("No se cargo el excel de Selnet")
     }else{ 
-    const workbook = XLSX.readFile()
+    const workbook = XLSX.readFile(pathSelnet)
     for(const sheetName of workbook.SheetNames){
         worksheets[sheetName] = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
     }
@@ -361,6 +332,11 @@ const selnet = (texto)=>{
     spinnerSelnet.classList.add('none')
 }
 
+
+const archivoSelnet = document.querySelector('#archivoSelnet');
+archivoSelnet.addEventListener('change',e=>{
+    pathSelnet = e.target.files[0].path
+})
 
 //ds-2ce10df0t-f
 //ds-7204hghi-f1
