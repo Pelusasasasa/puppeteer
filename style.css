@@ -69,6 +69,9 @@ html {
   table tr td{
     text-align: center;
   }
+  table tr:hover{
+    background-color: gray;
+  }
 
 
   .none{

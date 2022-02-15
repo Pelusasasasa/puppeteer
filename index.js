@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
-require('dotenv').config();
+const config = require('./config')
 
-const env = process.env
+const env = config;
 let pathExcel
 pathSelnet = "";
 
@@ -264,23 +264,26 @@ document.addEventListener('click',e=>{
 
 const guardar = document.querySelector('.guardar');
 guardar.addEventListener('click',async e=>{
-    const fs = require('fs');
-    const XLSX = require("xlsx");   
-    if (fs.existsSync(`${pathExcel}`)) {
-        let worksheets = {}
-        const workbook = XLSX.readFile(pathExcel)
-        for(const sheetName of workbook.SheetNames){
-            worksheets[sheetName] = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+    if (!pathExcel) {
+        alert("No selecciono una ubicacion donde guardar los productos")
+    }else{
+        const fs = require('fs');
+        const XLSX = require("xlsx");   
+        if (fs.existsSync(`${pathExcel}`)) {
+            let worksheets = {}
+            const workbook = XLSX.readFile(pathExcel)
+            for(const sheetName of workbook.SheetNames){
+                worksheets[sheetName] = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+            }
+            const Hoja1 = Object.keys(worksheets)[0];
+            productosAMostar.forEach(product =>{
+                worksheets[Hoja1].push(product);
+            })
+            XLSX.utils.sheet_add_json(workbook.Sheets[Hoja1],worksheets[Hoja1]);
+            console.log(workbook)
+            XLSX.writeFile(workbook,pathExcel)
         }
-        const Hoja1 = Object.keys(worksheets)[0];
-        productosAMostar.forEach(product =>{
-            worksheets[Hoja1].push(product);
-        })
-        XLSX.utils.sheet_add_json(workbook.Sheets[Hoja1],worksheets[Hoja1]);
-        console.log(workbook)
-        XLSX.writeFile(workbook,pathExcel)
     }
-    
 })
 
 const selnet = (texto)=>{
